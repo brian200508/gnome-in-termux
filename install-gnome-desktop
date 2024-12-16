@@ -106,6 +106,12 @@ function questions() {
 	echo "${R}[${W}-${R}]${G}Continuing with answer: $vlc_answer"${W}
 	sleep 0.2
     banner
+	read -p "${R} [${W}-${R}]${Y}Do you want to install VSCode (Visual Studio Code)(y/n) "${W} vscode_answer
+    vscode_answer=${vscode_answer:-y} 
+	echo
+	echo "${R}[${W}-${R}]${G}Continuing with answer: $vscode_answer"${W}
+	sleep 0.2
+    banner
     read -p "${R} [${W}-${R}]${Y}Do you want to create a normal user account (y/n) "${W} useradd_answer
     useradd_answer="${useradd_answer:-y}"
     echo "${R}[${W}-${R}]${G}Continuing with answer: $useradd_answer"${W}
@@ -286,6 +292,16 @@ function install_chromium() {
     sed -i 's/chromium %U/chromium --no-sandbox %U/g' /usr/share/applications/chromium.desktop
 }
 
+function install_vscode() {
+	banner
+	echo -e "${R} [${W}-${R}]${G} installing VSCode..."${W}
+	wget -O ~/code_stable_arm64.deb 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-arm64'
+	sudo apt install -y ~/code_stable_arm64.deb
+	rm ~/code_stable_arm64.deb
+	sudo apt update -y
+    sed -i 's/code %U/code --no-sandbox %U/g' /usr/share/applications/code.desktop
+}
+
 function firefox_install() {
 		clear
 		banner
@@ -395,6 +411,17 @@ function check_chromium() {
     fi
 }
 
+function check_vscode() {
+    echo "${R} [${W}-${R}]${Y}Checking if VSCode is installed or not...${W}"
+    if ! type -p "code" &>/dev/null; then
+        sleep 2
+        echo "${R} [${W}-${R}]${R}VSCode is not installed...${W}"
+        install_vscode
+    else
+        echo "${R} [${W}-${R}]${G}VSCode is already installed.${W}"
+    fi
+}
+
 function check_install() {
     echo "${R} [${W}-${R}]${Y}Checking if everything is installed or not...${W}"
     sleep 1
@@ -429,6 +456,12 @@ function check_install() {
             echo "${R} [${W}-${R}]${R}VLC is not installed, installing now...${W}"
             apt install vlc -y
         fi
+    fi
+    # VSCode check
+    if [[ "${vscode_answer}" == "y" ]]; then
+        check_vscode
+    else
+        echo "${R} [${W}-${R}]${G}Skipping VSCode.${W}"
     fi
 }
 
