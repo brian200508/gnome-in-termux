@@ -30,7 +30,7 @@
 3. Now copy pest this in termux 👇
 4. 
    ```
-   curl -Lf https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/setup.sh -o setup.sh ; bash setup.sh
+   curl -Lf https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/setup.sh -o setup.sh ; bash setup.sh
     ```
    - Now Select **CORE** Or **FULL(recomended)**
        <details>
