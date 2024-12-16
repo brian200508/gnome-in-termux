@@ -277,7 +277,7 @@ function install_chromium() {
 	banner
 	echo -e "${R} [${W}-${R}]${G} installing chromium..."${W}
 	if [ "$ID" == "ubuntu" ]; then
-	wget  https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/patch/chromium.sh
+	wget  https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/patch/chromium.sh
 	bash chromium.sh
 	rm chromium.sh
 	else
@@ -295,7 +295,7 @@ function firefox_install() {
 		echo
 		echo
 			if [ "$ID" == "ubuntu" ]; then
-			wget https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/patch/firefox.sh
+			wget https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/patch/firefox.sh
 			bash firefox.sh
 			rm firefox.sh
 			else

@@ -148,56 +148,56 @@ setup_installer() {
     echo "${G} Setup Installer... "${W}
     cd ~
     if [[ ${answer_distro} == "1" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-gnome-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/debian/root
     proot-distro login debian -- /bin/sh -c 'bash gnome-installer.sh'
 
     elif [[ ${answer_distro} == "2" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-gnome-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/ubuntu/root
     proot-distro login ubuntu -- /bin/sh -c 'bash gnome-installer.sh'
 
     elif [[ ${answer_distro} == "3" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-gnome-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/kali/root
     proot-distro login kali -- /bin/sh -c 'bash gnome-installer.sh'
 
     elif [[ ${answer_distro} == "4" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-gnome-pardus-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-gnome-pardus-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/pardus/root
     proot-distro login pardus -- /bin/sh -c 'bash gnome-installer.sh'
 
     elif [[ ${answer_distro} == "5" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-arch-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-arch-gnome-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/archlinux/root
     proot-distro login archlinux -- /bin/sh -c 'bash gnome-installer.sh'
 
     elif [[ ${answer_distro} == "6" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-fedora-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-fedora-gnome-desktop
     setup_tx11
     chmod -R +w $distro_path/fedora
     mv gnome-installer.sh $distro_path/fedora/root
     proot-distro login fedora -- /bin/sh -c 'bash gnome-installer.sh'
 
     elif [[ ${answer_distro} == "7" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-alpine-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-alpine-gnome-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/alpine/root
     proot-distro login alpine -- /bin/sh -c 'bash gnome-installer.sh'
 
     elif [[ ${answer_distro} == "8" ]]; then
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-manjaro-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-manjaro-gnome-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/manjaro/root
     proot-distro login manjaro -- /bin/sh -c 'bash gnome-installer.sh'
 
     else
-    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/sabamdarif/gnome-in-termux/main/install-gnome-desktop
+    wget -O $HOME/gnome-installer.sh https://raw.githubusercontent.com/brian200508/gnome-in-termux/main-brian200508/install-gnome-desktop
     setup_tx11
     mv gnome-installer.sh $distro_path/debian/root
     proot-distro login debian -- /bin/sh -c 'bash gnome-installer.sh'
