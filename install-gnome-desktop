@@ -299,8 +299,6 @@ function install_vscode() {
 	sudo apt install -y ~/code_stable_arm64.deb
 	rm ~/code_stable_arm64.deb
 	sudo apt update -y
-        sed -i 's/code %F/code --no-sandbox %F/g' /usr/share/applications/code.desktop
-        sed -i 's/code --new-window %F/code --no-sandbox --new-window %F/g' /usr/share/applications/code.desktop
 }
 
 function firefox_install() {
@@ -421,6 +419,9 @@ function check_vscode() {
     else
         echo "${R} [${W}-${R}]${G}VSCode is already installed.${W}"
     fi
+    echo "${R} [${W}-${R}]${R}Fixing VSCode application links...${W}"
+    sed -i 's/code %F/code --no-sandbox %F/g' /usr/share/applications/code.desktop
+    sed -i 's/code --new-window %F/code --no-sandbox --new-window %F/g' /usr/share/applications/code.desktop
 }
 
 function check_install() {
