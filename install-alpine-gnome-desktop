@@ -322,8 +322,8 @@ function check_vscode() {
         echo "${R} [${W}-${R}]${G}VSCode is already installed.${W}"
     fi
     echo "${R} [${W}-${R}]${R}Fixing VSCode application links...${W}"
-    sed -i 's/code %F/code --no-sandbox %F/g' /usr/share/applications/code.desktop
-    sed -i 's/code --new-window %F/code --no-sandbox --new-window %F/g' /usr/share/applications/code.desktop
+    sed -i 's/code %F/code --no-sandbox %F/g' /usr/share/applications/code-oss.desktop
+    sed -i 's/code --new-window %F/code --no-sandbox --new-window %F/g' /usr/share/applications/code-oss.desktop
 }
 
 function check_install() {
