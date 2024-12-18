@@ -106,7 +106,7 @@ function questions() {
 	echo "${R}[${W}-${R}]${G}Continuing with answer: $vlc_answer"${W}
 	sleep 0.2
     banner
-	read -p "${R} [${W}-${R}]${Y}Do you want to install VSCode (Visual Studio Code)(y/n) "${W} vscode_answer
+	read -p "${R} [${W}-${R}]${Y}Do you want to install VSCode (Visual Studio Code) (y/n) "${W} vscode_answer
     vscode_answer=${vscode_answer:-y} 
 	echo
 	echo "${R}[${W}-${R}]${G}Continuing with answer: $vscode_answer"${W}
