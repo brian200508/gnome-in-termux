@@ -18,6 +18,29 @@ echo "${C}${BOLD} Install Gnome Desktop In Termux ${W}"
 echo                                                    
 }
 
+function select_an_option() {
+    local max_options=$1
+    local default_option=${2:-1}
+    local response_var=$3
+    local response
+
+    while true; do
+        read -p "${Y}select an option (Default ${default_option}): ${W}" response
+        response=${response:-$default_option}
+
+        if [[ $response =~ ^[0-9]+$ ]] && ((response >= 1 && response <= max_options)); then
+            echo
+            echo "${R} [${W}-${R}]${G} Continuing with answer: $response${W}"
+            sleep 0.2
+            eval "$response_var=$response"
+            break
+        else
+            echo
+            echo "${R} [${R}☓${R}]${R} Invalid input. Please enter a number between 1 and $max_options.${W}"
+        fi
+    done
+}
+
 function check_root(){
 	if [ $EUID -ne 0 ]; then
 		echo -ne " ${R}Please Login Into Root User Then Run it Again!\n\n"${W}
@@ -39,6 +62,8 @@ function questions() {
 	read -p "${Y}select an option (Default 1): "${W} answer_browser
 	banner
 	read -p "${R} [${W}-${R}]${Y}Do you want to install VLC (y/n) "${W} vlc_answer
+	banner
+	read -p "${R} [${W}-${R}]${Y}Do you want to install VSCode (Visual Studio Code) (y/n) "${W} vscode_answer
     banner
     read -p "${R} [${W}-${R}]${Y}Do you want to create a normal user account (y/n) "${W} useradd_answer
     useradd_answer="${useradd_answer:-y}"
@@ -47,7 +72,44 @@ function questions() {
     banner
     echo "${R} [${W}-${R}]${G}Skiping User Account Setup"${W}
     else
-    echo "${R} [${W}-${R}]${G}Create user account"${W}
+	echo "${R} [${W}-${R}]${G}${BOLD} Select user account type"${W}
+	echo
+	echo "${Y}1. User with no password confirmation"${W}
+	echo
+	echo "${Y}2. User with password confirmation"${W}
+	echo
+	select_an_option 2 1 pass_type
+	    if [[ "$pass_type" == "1" ]]; then
+	    while true; do
+		echo " "
+		echo "${R} [${W}-${R}]${G} Default Password Will Be Set, Because Sometime It Might Ask You For Password"${W}
+		echo
+		echo "${R} [${W}-${R}]${G} Password:-${C}root"${W}
+		echo
+	    read -p "${R} [${W}-${R}]${G} Input username [Lowercase]: "${W} user_name
+	    echo
+	    read -p "${R} [${C}-${R}]${Y} Do you want to continue with username ${C}$user_name ${Y}? (y/n) : "${W} choice
+	    echo
+	    choice="${choice:-y}"
+	    echo
+	    echo "${R} [${W}-${R}]${G} Continuing with answer: $choice"${W}
+	    sleep 0.2
+	    case $choice in
+	    [yY]* )
+	    echo "${R} [${W}-${R}]${G} Continuing with username ${C}$user_name "${W}
+	    break;;
+	    [nN]* )
+	    echo "${R} [${W}-${R}]${G}Please provide username again."${W}
+	    echo
+	    ;;
+	    * )
+	    echo "${R}[${R}☓${R}]${R}Invalid input. Please enter 'y' or 'n'."${W}
+	    ;;
+	    esac
+	    done
+	    elif [[ "$pass_type" == "2" ]]; then
+	    echo
+	    echo "${R} [${W}-${R}]${G}${BOLD} Create user account"${W}
     echo
     while true; do
     read -p "${R} [${W}-${R}]${G}Input username [Lowercase]: "${W} user_name
@@ -56,20 +118,25 @@ function questions() {
     echo
     read -p "${R} [${W}-${R}]${Y}Do you want to continue with username ${C}$user_name ${Y}and password ${C}$pass${Y} ? (y/n) : " choice
 	choice="${choice:-y}"
+	    echo
+	    echo "${R} [${W}-${R}]${G} Continuing with answer: $choice"${W}
+	    echo ""
+	    sleep 0.2
     case $choice in
         [yY]* )
             echo "${R} [${W}-${R}]${G}Continuing with username ${C}$user_name ${G}and password ${C}$pass"
             sleep 0.3
             break;;
         [nN]* )
-            echo "${G}Skipping useradd step"${W}
-            sleep 0.3
-            break;;
+	    echo "${R} [${W}-${R}]${G}Please provide username and password again."${W}
+	    echo
+        ;;
         * )
             echo "${R}Invalid input. Please enter 'y' or 'n'."${W}
             ;;
     esac
 done
+    fi
     fi
 }
 
@@ -125,13 +192,24 @@ function login() {
     else
     final_user="root"
     fi
+
+    if [[ "$pass_type" == "2" ]]; then
+    final_pass="${pass}"
+    else
+    final_pass="root"
+    fi
+
     if [ "$useradd_answer" == "y" ]; then
     groupadd storage
     groupadd wheel
 	useradd -m -g users -s $(which bash) ${final_user}
     usermod -aG wheel,polkitd,audio,video,storage ${final_user}
-    echo "${final_user}:${pass}" | chpasswd
+    echo "${final_user}:${final_pass}" | chpasswd
+    if [[ "$pass_type" == "1" ]];then
+    echo "$final_user ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
+    elif [[ "$pass_type" == "2" ]];then
     echo "$final_user ALL=(ALL:ALL) ALL" | tee -a /etc/sudoers
+    fi
 fi
     clear   
 }
@@ -152,6 +230,12 @@ function install_chromium() {
 	echo "${R} [${W}-${R}]${G} installing chromium..."${W}
     pacman -Sy chromium
     sed -i 's/chromium %U/chromium --no-sandbox %U/g' /usr/share/applications/chromium.desktop
+}
+
+function install_vscode() {
+	banner
+	echo -e "${R} [${W}-${R}]${G} installing VSCode..."${W}
+    pacman -Sy code
 }
 
 function firefox_install() {
@@ -228,6 +312,20 @@ function check_chromium() {
     fi
 }
 
+function check_vscode() {
+    echo "${R} [${W}-${R}]${Y}Checking if VSCode is installed or not...${W}"
+    if ! type -p "code" &>/dev/null; then
+        sleep 2
+        echo "${R} [${W}-${R}]${R}VSCode is not installed...${W}"
+        install_vscode
+    else
+        echo "${R} [${W}-${R}]${G}VSCode is already installed.${W}"
+    fi
+    echo "${R} [${W}-${R}]${R}Fixing VSCode application links...${W}"
+    sed -i 's/code %F/code --no-sandbox %F/g' /usr/share/applications/code.desktop
+    sed -i 's/code --new-window %F/code --no-sandbox --new-window %F/g' /usr/share/applications/code.desktop
+}
+
 function check_install() {
     echo "${R} [${W}-${R}]${Y}Checking if everything is installed or not...${W}"
     sleep 1
@@ -262,6 +360,12 @@ function check_install() {
             echo "${R} [${W}-${R}]${R}VLC is not installed, installing now...${W}"
             pacman -Sy vlc -y
         fi
+    fi
+    # VSCode check
+    if [[ "${vscode_answer}" == "y" ]]; then
+        check_vscode
+    else
+        echo "${R} [${W}-${R}]${G}Skipping VSCode.${W}"
     fi
 }
 
