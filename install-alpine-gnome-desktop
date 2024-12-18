@@ -233,9 +233,11 @@ function install_chromium() {
 }
 
 function install_vscode() {
-	banner
-	echo -e "${R} [${W}-${R}]${G} installing VSCode (code-oss)..."${W}
-    apk add code-oss
+    banner
+    echo -e "${R} [${W}-${R}]${G} installing VSCode (code-oss)..."${W}
+    grep -qxF "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" /etc/apk/repositories || echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+    apk update
+    apk add code-oss@testing
 }
 
 function firefox_install() {
@@ -322,8 +324,8 @@ function check_vscode() {
         echo "${R} [${W}-${R}]${G}VSCode is already installed.${W}"
     fi
     echo "${R} [${W}-${R}]${R}Fixing VSCode application links...${W}"
-    sed -i 's/code %F/code --no-sandbox %F/g' /usr/share/applications/code-oss.desktop
-    sed -i 's/code --new-window %F/code --no-sandbox --new-window %F/g' /usr/share/applications/code-oss.desktop
+    sed -i 's/code-oss %F/code-oss --no-sandbox %F/g' /usr/share/applications/code-oss.desktop
+    sed -i 's/code-oss --new-window %F/code-oss --no-sandbox --new-window %F/g' /usr/share/applications/code-oss.desktop
 }
 
 function check_install() {
